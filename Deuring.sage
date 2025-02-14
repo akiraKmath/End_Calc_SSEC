@@ -104,7 +104,7 @@ def Constructive_Deuring_ver3(Alphas,Sd,p,field,E):
 
         EE = phi.codomain()
         # print("l = ", ell, ": j-inv =", EE.j_invariant())
-        # print("ell = ", ell, ": Isogeny = ", elapsed_time)
+        print("ell = ", ell, ": Isogeny = ", elapsed_time)
 
         Phi = phi.rational_maps()
         for j in range(i+1, r):

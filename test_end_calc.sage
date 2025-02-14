@@ -16,6 +16,7 @@ load("trace_cal.sage")
 
 
 def End_basis_test(k, ells_num, collect_nums, Fp_defined, is_elkies, D = 0):
+    bound = 9*k                            #Schoof Algorithm 用の制限(基準)
     time_stamp = []
     print("=== Fix a prime of bit k ================================")
     p = random_blum_prime(2^(k-1),2^k)
@@ -24,12 +25,14 @@ def End_basis_test(k, ells_num, collect_nums, Fp_defined, is_elkies, D = 0):
     ell_set = Primes()[:ells_num]
     print(ell_set)
     E_1728 = EllipticCurve_from_j(F(1728))
-    exp1 = floor(logb(p/36,2))  
+    #exp1 = floor(logb(p/36,2)) 
+    exp1 = floor(logb(p/24,2))  
     print("=========================================================")
     print()
     #=======================================================
     if D == 0:
         D = RR((12.0*log(p))/(log(log(p))))
+        #D = RR((8.0*log(p))/(log(log(p))))
     #======== Fp上の超特異楕円曲線の決定 =======================
     print("=== Fix a supersingular elliptic curve ==================")
     while(1) :
@@ -60,7 +63,7 @@ def End_basis_test(k, ells_num, collect_nums, Fp_defined, is_elkies, D = 0):
     print("=========================================================")
     print()
     print("=== Computing a basis of End(E) (Step 1)=================")
-    bound = 13*k                            #Schoof Algorithm 用の制限(基準)
+    
     start_time1 = time.time()
     if Fp == 1:
         basis, num_gen = End_basis_prime(E, p, ell_set, bound, collect_nums, is_elkies)
@@ -109,18 +112,21 @@ def End_basis_test(k, ells_num, collect_nums, Fp_defined, is_elkies, D = 0):
     print()
     print("=========================================================")
     print()
+    print("=== Result ==============================================")
+
     if E.j_invariant() == Result_Deuring[0].j_invariant().conjugate() or E.j_invariant() == Result_Deuring[0].j_invariant():
-        print("=========================================================")
         total = time_stamp[0]+time_stamp[1]+time_stamp[2]
         time_stamp.append(total)
         print("Verified")
         print("Result: ", basis)
         print("num_gen : ", num_gen)
+        print("=========================================================")
         return basis, time_stamp, num_gen
     else:
         print("=========================================================")
         print("Can't be verified")
         print("Result: False")
+        print("=========================================================")
         return False
 
 
