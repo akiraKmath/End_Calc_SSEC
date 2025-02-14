@@ -9,4 +9,6 @@ is_elkies = True
 test_time = 5
 
 for i in range(test_time):
-    End_basis_test(k, ells_num, collect_nums, Fp_defined, is_elkies, D = 0)
+    result = End_basis_test(k, ells_num, collect_nums, Fp_defined, is_elkies, D = 0)
+    if result != False:
+        basis, time_stamp, num_gen = result

@@ -17,4 +17,9 @@
 テストコードは`sage test_end_calc.sage`で実行可能である.   
 編集可能なパラメータは以下の通りである:
 - `k`: $\mathbb{F}_q$の標数 $p$のビット数
-- `times`: 実行回数
+- `ells_num`: サイクルの次数に用いる素数の数
+- `collect_nums`: 2,3-isogenyの数
+- `Fp_defined`: 基礎体(`Fp=1`なら素体, `Fp=2`なら拡大体, `Fp=0`なら制限なし)
+- `D`: 
+- `is_elkies`: Elkies素数の利用の有無
+- `test_times`: 実行回数
