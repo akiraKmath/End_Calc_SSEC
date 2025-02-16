@@ -1,3 +1,6 @@
+import sys
+import itertools
+
 def ext_isogeny(E, phi, extension_degree):      ###同種写像列の基礎体の拡大
     ext_phi = []
     F = E.base_field()
@@ -14,6 +17,62 @@ def ext_isogeny(E, phi, extension_degree):      ###同種写像列の基礎体�
             expsi.append(exQR(ratn)/exQR(ratd))
         ext_phi.append(expsi)
     return ext_phi
+
+def prime_point_collect(E, ext_bound):
+    print("ext_bound : ", ext_bound)
+    chars = itertools.cycle(r'/-\|')
+    print("finding ell-torsion points : ", end = "")
+    qq = E.base_field().order(); pp = (E.cardinality()-(qq+1))/2 #pp = qq.factor()[0][0]
+    prime_point = dict(); d = 0
+    elkies_prime = Primes()[:27]
+    a = E.a4(); b = E.a6(); T = prod(elkies_prime)
+    card_E_all_factors = []
+    while True:
+        d += 1
+        card_E = (qq^d+ 1 - (-1)^d*2*pp^d) #E(F_p^2d)
+        card_Et = sqrt(qq^d+ 1 - (-1)^d*2*pp^d) #E(F_p^2d)
+        #print("d = ", d)
+        #sys.stdout.write('\b'+repr(d))
+        #sys.stdout.flush()
+        
+        for card_E_factor in card_E_all_factors:  #E(F_p^(2^i)) | E(F_p^2^(i+1))
+            while card_E % card_E_factor == 0:
+                card_E //= card_E_factor
+        
+        card_E_factors = [ell[0] for ell in ZZ(sqrt(card_E)).factor()]
+
+        for factor in card_E_factors:
+            card_E_all_factors.append(factor) 
+        use_ells = [ell for ell in card_E_factors if (ell < 10000000)] #min{p, 10000000}   
+        
+        if d > 1:
+            exF = E.base_field().extension(d); q = exF.order()
+            EE = EllipticCurve(exF, [a,b])
+        else:
+            EE = E
+        check = 0 
+        for ell in use_ells:
+            if ell not in elkies_prime:
+                while(1):
+                    sys.stdout.write('\b'+next(chars))
+                    sys.stdout.flush()
+                    P = EE.random_element()
+                    #print("P = ", P, P.order().factor())
+                    preP = ZZ(card_Et/ell) * P
+                    #print("preP = ", preP)
+                    if preP != EE(0) and ell*preP == EE(0):
+                        Q = preP
+                        break;
+                T *= ell; prime_point[ell] = Q
+                if T.nbits() > (ext_bound/2+3):
+                    check = 1
+                    break
+        if check == 1:
+            sys.stdout.write('\b'+' ')
+            sys.stdout.flush()
+            print("points found")
+            return prime_point
+            
 
 def isogeny_point_data(E, P, phi):           ###サイクルの座標計算
     xt = P.xy()[0]; yt = P.xy()[1]
@@ -63,9 +122,10 @@ def ell_tor_prime(E, deg, T, done_ells):
                 return d, use_ells_list
         use_ells_list.append(use_ells)
 
-def Point_data(E, phi, deg, d, ells, is_frobenius):     ###Schoofに用いる点などのデータの計算
+def Point_data(E, phi, deg, d, ells, prime_point, is_frobenius):     ###Schoofに用いる点などのデータの計算
     data = []; qq = E.base_field().order(); pp = (E.cardinality()-(qq+1))/2 #pp = qq.factor()[0][0]
     Et_card = sqrt(qq^d+ 1 - (-1)^d*2*pp^d) 
+    #print("d = ", d, "\nells = ", ells, "\nprime_point = ", prime_point)
     if d > 1:
         a = E.a4(); b = E.a6(); exF = E.base_field().extension(d); q = exF.order()
         EE = EllipticCurve(exF, [a,b])
@@ -74,13 +134,16 @@ def Point_data(E, phi, deg, d, ells, is_frobenius):     ###Schoofに用いる点
         EE = E; exphi = phi
     for ell in ells:
         st = time.time()
-        while(1):
-            P = EE.random_element()
-            preP = ZZ(Et_card/ell) * P
-                
-            if preP != EE(0) and ell*preP == EE(0):
-                Q = preP
-                break;
+        try:
+            Q = prime_point[ell]
+        except KeyError:
+            while(1):
+                P = EE.random_element()
+                preP = ZZ(Et_card/ell) * P
+                    
+                if preP != EE(0) and ell*preP == EE(0):
+                    Q = preP
+                    break;
             
         et = time.time()-st
         if is_frobenius:
@@ -167,7 +230,7 @@ def elliptic_quotient(E, phi):
     nphiss = [NR(nphi_p(x=s, y= 1)) for nphi_p in nphiss]
     return nphiss
 
-def Schoof_Hybrid_data(E, phi, deg):  #RandomSamplingで使う素数を事前に集める．Elkies素数はそれ以外のものを使う．
+def Schoof_Hybrid_data(E, phi, deg, prime_point):  #RandomSamplingで使う素数を事前に集める．Elkies素数はそれ以外のものを使う．
     #========== time data ===============================
     Elkies_list = [5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113]
     Elkies_time = [0.46527299284935, 0.43057015538215637, 0.5715641677379608, 0.7338555256525675, 0.6296719551086426, 0.8843600273132324, 1.0611517429351807, 1.5139443635940553, 1.6602551698684693, 2.680908226966858, 3.0691380977630613, 3.2790233850479127, 3.8630520343780517, 5.0347225904464725, 6.481257033348084, 6.9038142442703245, 8.45649094581604, 9.379428505897522, 9.890097093582153, 11.766771030426025, 13.093309259414672, 15.296850228309632, 17.797670602798462, 19.846211624145507, 21.15657832622528, 23.242745447158814, 24.819961524009706, 27.34380567073822]
@@ -175,6 +238,7 @@ def Schoof_Hybrid_data(E, phi, deg):  #RandomSamplingで使う素数を事前に
     exdeg_time = [0.056093454360961914, 0.3169085184733073, 0.4095543920993805, 0.5012552056993756, 0.9880895614624023, 1.5507220824559529, 3.100886901219686, 4.010195398330689, 8.352376752429539, 14.300596740510729, 38.491298834482826, 83.52607655525208]
     #=====================================================
     print("degree : ", deg.nbits())
+    #print("prime_point in SHd: ", prime_point)
     F = E.base_field()
     T = 1; S = []; Z = []; R.<t> = F[]
     done_ells = [ell[0] for ell in deg.factor()]  
@@ -220,7 +284,7 @@ def Schoof_Hybrid_data(E, phi, deg):  #RandomSamplingで使う素数を事前に
         stime = time.time()
         if use_ells_list[d-1] == []: continue
         print("extension degree : ", d)
-        Data = Point_data(E, phi, deg, d, use_ells_list[d-1], False) 
+        Data = Point_data(E, phi, deg, d, use_ells_list[d-1], prime_point, False) 
         etime = time.time() - stime
         #print("time(RandomSampling) =", etime)
         if Data != None:
@@ -242,7 +306,7 @@ def Schoof_Hybrid_data(E, phi, deg):  #RandomSamplingで使う素数を事前に
                 return trace
         #============================================================================================
 
-def Schoof_data(E, phi, deg, is_frobenius):  #RandomSamplingで使う素数を事前に集める．Elkies素数はそれ以外のものを使う．
+def Schoof_data(E, phi, deg, prime_point, is_frobenius):  #RandomSamplingで使う素数を事前に集める．Elkies素数はそれ以外のものを使う．
     print("degree : ", deg.nbits())
     F = E.base_field()
     T = 1; S = []; Z = []; R.<t> = F[]
@@ -255,7 +319,7 @@ def Schoof_data(E, phi, deg, is_frobenius):  #RandomSamplingで使う素数を�
         stime = time.time()
         if use_ells_list[d-1] == []: continue
         print("extension degree : ", d)
-        Data = Point_data(E, phi, deg, d, use_ells_list[d-1], is_frobenius) 
+        Data = Point_data(E, phi, deg, d, use_ells_list[d-1], prime_point, is_frobenius) 
         etime = time.time() - stime
         #print("time(RandomSampling) =", etime)
         if Data != None:
@@ -277,10 +341,10 @@ def Schoof_data(E, phi, deg, is_frobenius):  #RandomSamplingで使う素数を�
                 return trace
         #============================================================================================
 
-def trace_cal(E, cycle, deg, is_elkies, is_frobenius):
+def trace_cal(E, cycle, deg, prime_point, is_elkies, is_frobenius):
     p = E.base_field().characteristic()
-    if is_frobenius: return Schoof_data(E, cycle, deg*p, is_frobenius)/2
+    if is_frobenius: return Schoof_data(E, cycle, deg*p, prime_point, is_frobenius)/2
     if is_elkies:
-        return Schoof_Hybrid_data(E, cycle, deg)/2
+        return Schoof_Hybrid_data(E, cycle, deg, prime_point)/2
     else:
-        return Schoof_data(E, cycle, deg, False)/2
+        return Schoof_data(E, cycle, deg, prime_point, False)/2

@@ -1,3 +1,6 @@
+import sys
+import itertools
+
 def ell_path_to_Ep(E, ell, ell_set, max_length, reject_jinvs):
     F = E.base_field()
     p = F.characteristic()
@@ -23,7 +26,7 @@ def ell_path_to_Ep(E, ell, ell_set, max_length, reject_jinvs):
             jt_dummy = choice(ModPoly[ell](jt,Y).roots())[0] #It picks a random root of modular poly.
         jt = jt_dummy
 
-        if jt == j0p:#Find a path from j0 to j0p
+        if jt == j0p and jt not in reject_jinvs:#Find a path from j0 to j0p
             #print("trail1 : ", trail1)
             if j0 == j0p and len(trail1) == 2:
                 continue
@@ -59,7 +62,7 @@ def ell_path_to_Ep(E, ell, ell_set, max_length, reject_jinvs):
         Check = 0
         for el in ell_set:
             if ModPoly[el](jt,jt^p) == 0 and el != ell and jt not in reject_jinvs:
-                print("jt : ", jt, el)
+                #print("jt : ", jt, el)
                 rj = jt
                 Check = 1
                 degs1.append(el)
@@ -98,14 +101,20 @@ def ell_path_to_Ep(E, ell, ell_set, max_length, reject_jinvs):
 
 def cycles_pair(E, ell_set, max_length, setcard, rejects):
     f_set = []
+    chars = itertools.cycle(r'/-\|')
+    print("finding path : ", end = "")
     while (1):
         path = ell_path_to_Ep(E, ell_set[0], ell_set, max_length/2, rejects[0])
-        #print("path : ", path)
+        sys.stdout.write('\b'+next(chars))
+        sys.stdout.flush() 
         if path != False:
             if path[0] not in f_set:
                 f_set.append(path[0])
                 rejects[0].append(path[1])
+                sys.stdout.write('\b'+' ')
+                sys.stdout.flush() 
                 print(repr(ell_set[0]) + "-path found : ", len(f_set), " / " + repr(setcard))
+                print("finding path : ", end = "")
         if len(f_set) >= setcard:
             break;
     mm = max([prod(pp[1]).nbits() for pp in f_set])
@@ -113,12 +122,19 @@ def cycles_pair(E, ell_set, max_length, setcard, rejects):
     s_set = []
     while (1):
         path = ell_path_to_Ep(E, ell_set[1], ell_set, max_length-mm, rejects[1])
+        sys.stdout.write('\b'+next(chars))
+        sys.stdout.flush() 
         if path != False:
+            sys.stdout.write('\b'+' ')
+            sys.stdout.flush() 
             if path[0] not in s_set:
                 s_set.append(path[0])
                 rejects[1].append(path[1])
                 print(repr(ell_set[1]) + "-path found : ", len(s_set), " / " + repr(setcard))
+                print("finding path : ", end = "")
         if len(s_set) >= setcard:
+            sys.stdout.write('all done \n')
+            sys.stdout.flush() 
             break;
 
     return f_set, s_set
@@ -154,20 +170,32 @@ def cycles_by_pair(f_set,s_set, max_len, p):
     return ncycles
 
 def cycles_append(E, ell_set, f_set, s_set, max_length, rejects):
-    
+    chars = itertools.cycle(r'/-\|')
+    print("finding extra path : ", end = "")
     while (1):
         path = ell_path_to_Ep(E, ell_set[0], ell_set, max_length/2, rejects[0])
+        sys.stdout.write('\b'+next(chars))
+        sys.stdout.flush()
         if path != False:
             if path[0] not in f_set:
+                sys.stdout.write('\b'+' ')
+                sys.stdout.flush()
                 f_set.append(path[0])
                 rejects[0].append(path[1])
+                print("path found")
                 break;
+    print("finding extra path : ", end = "")
     while (1):
         path = ell_path_to_Ep(E, ell_set[1], ell_set, max_length/2, rejects[1])
+        sys.stdout.write('\b'+next(chars))
+        sys.stdout.flush()
         if path != False:
             if path[0] not in s_set:
+                sys.stdout.write('\b'+' ')
+                sys.stdout.flush()
                 s_set.append(path[0])
                 rejects[1].append(path[1])
+                print("path found")
                 break;
 
     return f_set, s_set

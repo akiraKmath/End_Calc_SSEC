@@ -22,12 +22,13 @@ def first_cycle_conversion_prime(E, p, cycle, deg, is_elkies):
     except ZeroDivisionError:
         return False
 
-def first_cycle_conversion_prime_v2(E, p, cycle, deg, is_elkies):
+def first_cycle_conversion_prime_v2(E, p, cycle, deg, prime_point, is_elkies):
+    #print("prime_point in fccp: ", prime_point)
     try:
-        cycle_a = trace_cal(E, cycle, deg, is_elkies, False)
+        cycle_a = trace_cal(E, cycle, deg, prime_point, is_elkies, False)
         R = cycle[0][0].parent()
         x,y = R.gens()
-        cycle_c = trace_cal(E, cycle, deg, is_elkies, True)
+        cycle_c = trace_cal(E, cycle, deg, prime_point, is_elkies, True)
         cycle_c = -cycle_c/p
         if deg - cycle_a^2-p*(cycle_c^2) == 0:
             return False
@@ -68,9 +69,10 @@ def first_cycle_conversion_ext(E, p, cycle, deg, is_elkies):
     except ZeroDivisionError:
         return False;
 
-def first_cycle_conversion_ext_v2(E, p, cycle, deg, is_elkies):
+def first_cycle_conversion_ext_v2(E, p, cycle, deg, prime_point, is_elkies):
+    #print("prime_point in fcce: ", prime_point)
     try:
-        cy_a =  trace_cal(E, cycle, deg, is_elkies, False)
+        cy_a =  trace_cal(E, cycle, deg, prime_point, is_elkies, False)
         cy_a = QQ(cy_a)
         if cy_a == None:
             return False
@@ -88,15 +90,15 @@ def first_cycle_conversion_ext_v2(E, p, cycle, deg, is_elkies):
     except ZeroDivisionError:
         return False;
 
-def second_cycle_conversion_prime(E, p, cycle, deg, cycle0, deg0, coefs0, is_elkies):
+def second_cycle_conversion_prime(E, p, cycle, deg, cycle0, deg0, coefs0, prime_point, is_elkies):
     a0,b0,c0,d0 = coefs0
     try:
-        cycle_a = trace_cal(E, cycle, deg, is_elkies, False)
-        tr = trace_cal(E, cycle0+cycle, deg*deg0, is_elkies, False)
+        cycle_a = trace_cal(E, cycle, deg, prime_point, is_elkies, False)
+        tr = trace_cal(E, cycle0+cycle, deg*deg0, prime_point, is_elkies, False)
         R = cycle[0][0].parent()
         x,y = R.gens()
-        cycle_c = trace_cal(E, cycle, deg, is_elkies, True)
-        trc = trace_cal(E, cycle0+cycle, deg0*deg, is_elkies, True) 
+        cycle_c = trace_cal(E, cycle, deg, prime_point, is_elkies, True)
+        trc = trace_cal(E, cycle0+cycle, deg0*deg, prime_point, is_elkies, True) 
         cycle_c = -cycle_c/p; trc = -trc/p
         if deg - cycle_a^2-p*(cycle_c^2) == 0:
             return False
@@ -122,8 +124,8 @@ def second_cycle_conversion_prime(E, p, cycle, deg, cycle0, deg0, coefs0, is_elk
 def second_cycle_conversion_ext(E, p, cycle, deg, cycle0, deg0, coefs0, is_elkies):
     a0,b0,c0,d0 = coefs0
     try:
-        a1 = trace_cal(E, cycle, deg, is_elkies, False)
-        tr = trace_cal(E, cycle0+cycle, deg*deg0, is_elkies, False)
+        a1 = trace_cal(E, cycle, deg, prime_point, is_elkies, False)
+        tr = trace_cal(E, cycle0+cycle, deg*deg0, prime_point, is_elkies, False)
         if deg - a1^2 == 0 or tr == None or a1 == None:
             return False
         A = tr-a0*a1
@@ -147,11 +149,11 @@ def second_cycle_conversion_ext(E, p, cycle, deg, cycle0, deg0, coefs0, is_elkie
     except ZeroDivisionError:
         return False
 
-def second_cycle_conversion_ext_v2(E, p, cycle, deg, cycle0, deg0, coefs0, is_elkies):
+def second_cycle_conversion_ext_v2(E, p, cycle, deg, cycle0, deg0, coefs0, prime_point, is_elkies):
     a0,b0,c0,d0 = coefs0
     try:
-        a1 = trace_cal(E, cycle, deg, is_elkies, False)
-        tr = trace_cal(E, cycle0+cycle, deg*deg0, is_elkies, False)
+        a1 = trace_cal(E, cycle, deg, prime_point, is_elkies, False)
+        tr = trace_cal(E, cycle0+cycle, deg*deg0, prime_point, is_elkies, False)
         if deg - a1^2 == 0 or tr == None or a1 == None:
             return False
         A = tr-a0*a1
@@ -174,12 +176,12 @@ def second_cycle_conversion_ext_v2(E, p, cycle, deg, cycle0, deg0, coefs0, is_el
     except ZeroDivisionError:
         return False
 
-def third_cycle_conversion_ext(E, p, cycle, deg, cycle0, deg0, coefs0, cycle1, deg1, coefs1, is_elkies):
+def third_cycle_conversion_ext(E, p, cycle, deg, cycle0, deg0, coefs0, cycle1, deg1, coefs1, prime_point, is_elkies):
     a0,b0,c0,d0 = coefs0; a1,b1,c1,d1 = coefs1; 
     try:
-        a2 = trace_cal(E, cycle, deg, is_elkies, False)
-        tr02 = trace_cal(E, cycle0+cycle, deg*deg0, is_elkies, False)
-        tr12 = trace_cal(E, cycle1+cycle, deg*deg1, is_elkies, False)
+        a2 = trace_cal(E, cycle, deg, prime_point, is_elkies, False)
+        tr02 = trace_cal(E, cycle0+cycle, deg*deg0, prime_point, is_elkies, False)
+        tr12 = trace_cal(E, cycle1+cycle, deg*deg1, prime_point, is_elkies, False)
         if deg - a2^2 == 0 or tr02 == None or tr12 == None:
             return False
         var('x y z')
@@ -194,13 +196,13 @@ def third_cycle_conversion_ext(E, p, cycle, deg, cycle0, deg0, coefs0, cycle1, d
     except TypeError:
         return False
 
-def other_cycle_conversion_ext(E, p, cycle, deg, cycle0, deg0, coefs0, cycle1, deg1, coefs1, cycle2, deg2, coefs2, is_elkies):
+def other_cycle_conversion_ext(E, p, cycle, deg, cycle0, deg0, coefs0, cycle1, deg1, coefs1, cycle2, deg2, coefs2, prime_point, is_elkies):
     a0, b0, c0, d0 = coefs0; a1, b1, c1, d1 = coefs1; a2, b2, c2, d2 = coefs2;
     try:
-        a3 = trace_cal(E, cycle, deg, is_elkies, False)
-        tr03 = trace_cal(E, cycle0+cycle, deg0*deg, is_elkies, False)
-        tr13 = trace_cal(E, cycle1+cycle, deg1*deg, is_elkies, False)
-        tr23 = trace_cal(E, cycle2+cycle, deg2*deg, is_elkies, False)
+        a3 = trace_cal(E, cycle, deg, prime_point, is_elkies, False)
+        tr03 = trace_cal(E, cycle0+cycle, deg0*deg, prime_point, is_elkies, False)
+        tr13 = trace_cal(E, cycle1+cycle, deg1*deg, prime_point, is_elkies, False)
+        tr23 = trace_cal(E, cycle2+cycle, deg2*deg, prime_point, is_elkies, False)
         if a3 == None or tr03 == None or tr13 == None or tr23 == None or deg == a3^2:
             return False;
         tM = Matrix(QQ,[[b0,-p*c0,-p*d0,a0*a3-tr03],[b1,-p*c1,-p*d1,a1*a3-tr13],[b2,-p*c2,-p*d2,a2*a3-tr23]])
@@ -268,7 +270,7 @@ def is_maximal_prime(totos, k, p):
             baslis.append(x)
     N = product_phi_mat_ver_qua(baslis)
     if N.det() != 0:
-        print(factor(N.det()))
+        print("discriminant of subring of End(E): ", factor(N.det()))
         return N.det(), baslis
 
 def is_maximal_ext(totos, k, p):
@@ -290,7 +292,7 @@ def is_maximal_ext(totos, k, p):
             baslis.append(x)
     N = product_phi_mat_ver_qua(baslis)
     if N.det() != 0:
-        print(factor(N.det()))
+        print("discriminant of subring of End(E): ", factor(N.det()))
         return N.det(), baslis
 
 
@@ -301,6 +303,7 @@ def End_basis_prime(E, p, ell_set, bound, collect_nums, is_elkies):
     cycles = []; coeflist = []
     found_cycles = []; done_cycles = []
     rejects = [[],[]]
+    prime_point = prime_point_collect(E, bound)
     while (1):
         if check == 0:
             cycle_set = cycles_pair(E, ell_set, bound/3, collect_nums,rejects)
@@ -323,7 +326,7 @@ def End_basis_prime(E, p, ell_set, bound, collect_nums, is_elkies):
             if len(coeflist) == 0:
                 if  cycle not in done_cycles:
                     cycle0 = cycle[0]; deg0 = cycle[1]
-                    coefs0 = first_cycle_conversion_prime_v2(E, p, cycle0, deg0, is_elkies)
+                    coefs0 = first_cycle_conversion_prime_v2(E, p, cycle0, deg0, prime_point, is_elkies)
                     if coefs0 != False:
                         if coefs0 != None:
                             coeflist.append(coefs0); 
@@ -332,7 +335,7 @@ def End_basis_prime(E, p, ell_set, bound, collect_nums, is_elkies):
             else:
                 if cycle not in done_cycles:
                     cycle1 = cycle[0]; deg1 = cycle[1]
-                    coefs1 = second_cycle_conversion_prime(E, p, cycle1, deg1, cycle0, deg0, coefs0, is_elkies)
+                    coefs1 = second_cycle_conversion_prime(E, p, cycle1, deg1, cycle0, deg0, coefs0, prime_point, is_elkies)
                     if coefs1 != False:
                         if coefs1 != None:
                             coeflist.append(coefs1); 
@@ -344,6 +347,10 @@ def End_basis_prime(E, p, ell_set, bound, collect_nums, is_elkies):
                 det, basis = is_maximal_prime(copy(coeflist), len(coeflist), p)
 
                 if det == p^2:
+                    print()
+                    print("basis : ", basis);
+                    print()
+                    print("#generators = ", len(coeflist))
                     return basis, len(coeflist)
             print()
 
@@ -351,17 +358,14 @@ def End_basis_prime(E, p, ell_set, bound, collect_nums, is_elkies):
 
 
 def End_basis_ext(E, p, ell_set, bound, collect_nums, is_elkies):
-    j = E.j_invariant()
-    ellset0 = copy(ell_set)
-    cycles = []
-    coflist = []
-    trys = 1
-    predet = 0
-    check = 0
-    pretrys = 1
-    cycs_cand = []; removed_cycs = []
+    j = E.j_invariant(); ellset0 = copy(ell_set)
+    cycles = []; coflist = []
+    trys = 1; predet = 0; check = 0
+    pretrys = 1; cycs_cand = []; removed_cycs = []
     cyc_find_time = 0
     rejects = [[],[]]
+    prime_point = prime_point_collect(E, bound)
+    #print("prime_point = ", prime_point)
     while(1):
         st = time.time()
         if check == 0:
@@ -393,7 +397,7 @@ def End_basis_ext(E, p, ell_set, bound, collect_nums, is_elkies):
             for cycle in cycs_cand:
                 cycle0 = cycle[0]; deg0 = cycle[1]
                 print("degree of cycle : ", cycle[1].nbits())
-                cofs = first_cycle_conversion_ext_v2(E, p, cycle0, deg0, is_elkies)
+                cofs = first_cycle_conversion_ext_v2(E, p, cycle0, deg0, prime_point, is_elkies)
                 if cofs != False and cofs[3] != 0:
                     coflist.append(cofs)
                     rv_cycle = cycle
@@ -403,7 +407,7 @@ def End_basis_ext(E, p, ell_set, bound, collect_nums, is_elkies):
             if check == 1:
                 cycles.append(rv_cycle)
                 cycs_cand.remove(rv_cycle)
-            print("coflist : ", coflist)
+            #print("coflist : ", coflist)
         
         if check == 1:
             for cycle in cycs_cand:
@@ -414,17 +418,17 @@ def End_basis_ext(E, p, ell_set, bound, collect_nums, is_elkies):
                     if len(coflist) == 1:
                         cycle1 = cycle[0]; deg1 = cycle[1]
                         print("second cycle cof calc")
-                        cofs = second_cycle_conversion_ext_v2(E, p, cycle1, deg1, cycle0, deg0, coflist[0], is_elkies)
+                        cofs = second_cycle_conversion_ext_v2(E, p, cycle1, deg1, cycle0, deg0, coflist[0], prime_point, is_elkies)
                         
                     elif len(coflist) == 2:
                         cycle2 = cycle[0]; deg2 = cycle[1]
                         print("third cycle cof calc")
-                        cofs = third_cycle_conversion_ext(E, p, cycle2, deg2, cycle0, deg0, coflist[0], cycle1, deg1, coflist[1], is_elkies)
+                        cofs = third_cycle_conversion_ext(E, p, cycle2, deg2, cycle0, deg0, coflist[0], cycle1, deg1, coflist[1], prime_point, is_elkies)
                         
                     else:
                         cycle3 = cycle[0]; deg3 = cycle[1]
                         print("other cycle cof calc")
-                        cofs = other_cycle_conversion_ext(E, p, cycle3, deg3, cycle0, deg0, coflist[0], cycle1, deg1, coflist[1], cycle2, deg2, coflist[2], is_elkies)
+                        cofs = other_cycle_conversion_ext(E, p, cycle3, deg3, cycle0, deg0, coflist[0], cycle1, deg1, coflist[1], cycle2, deg2, coflist[2], prime_point, is_elkies)
                         
                     
                     if cofs != False:
@@ -436,15 +440,15 @@ def End_basis_ext(E, p, ell_set, bound, collect_nums, is_elkies):
                     cycles.append(rv_cycle)
                     cycs_cand.remove(rv_cycle)
 
-                print("coflist : ", coflist)
+                #print("coflist : ", coflist)
                 if len(coflist) >= 2:
                     det, baslis = is_maximal_ext(copy(coflist), len(coflist), p)
                     predet = det
                     if det == p^2:
                         print()
-                        print("baslis : ", baslis);
+                        print("basis : ", baslis);
                         print()
-                        print("#generators = ", len(cycles))
+                        print("#generators = ", len(coflist))
                         sum_of_len_of_cycles = 0
                         for res_cyc in cycles:
                             sum_of_len_of_cycles += len(res_cyc[0])

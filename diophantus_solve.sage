@@ -132,7 +132,7 @@ def GSO_expand(B, n, cofs):
                 mu[i,j] = (cofs[0]*B[i][0]*GS[j][0]+cofs[1]*B[i][1]*GS[j][1]+cofs[2]*B[i][2]*GS[j][2])/(cofs[0]*(GS[j][0]^2)+cofs[1]*(GS[j][1]^2)+cofs[2]*(GS[j][2]^2))
                 GS[i] -= mu[i,j]*GS[j]
             except ZeroDivisionError:
-                print("done")
+                #print("done")
                 return 0, GS[j]
 #             print("mu = ", mu)
 #             print("mu[i,j] = ", mu[i,j])
@@ -217,7 +217,7 @@ def is_isotropic3_2(c1,c2,c3):
     a1, a2, a3, MF = make_squarefree(ZZ(c1),ZZ(c2),ZZ(c3))
     #part4: done
     ta1, ta2, ta3 = a1, a2, a3
-    print("ta1, ta2, ta3 = ", ta1, ta2, ta3)
+    #print("ta1, ta2, ta3 = ", ta1, ta2, ta3)
     if a1 % 2 == 0:
         ta1 /= 2
     if a2 % 2 == 0:
@@ -228,18 +228,18 @@ def is_isotropic3_2(c1,c2,c3):
     r2 = SC(a3,a1,ta2)
     ff3 = vector(ZZ, [r3,-1,0]); ff1 = vector(ZZ, [0,r1,-1])
     ff2 = vector(ZZ, [-1,0,r2])
-    print(ff1,ff2,ff3)
+    #print(ff1,ff2,ff3)
     gg0 = vector(ZZ, 3)
     for i in range(3):
         gg0[i] = crt([ff3[i],ff1[i],ff2[i]],[ta3,ta1,ta2])
-    print("gg0 = ", gg0%abs(ta1*ta2*ta3))
+    #print("gg0 = ", gg0%abs(ta1*ta2*ta3))
     sol_a = find_sols_mod(gg0[0],gg0[1],gg0[2],abs(ta1*ta2*ta3))
     sol_4 = find_sols_mod4((ta1, ta2, ta3))
     for i in range(2):
         if sol_4[i] != []:
             sols = find_sol_gen(sol_a,sol_4[i], abs(ta1*ta2*ta3))
             M = Matrix([sols[0],sols[1],sols[2]])
-            print("M = ", M)
+            #print("M = ", M)
             for j in range(3):
                 if ta1*(sols[j][0]^2)+ta2*(sols[j][1]^2)+ta3*(sols[j][2]^2) == 0:
                     return MF[0]*sols[j][0], MF[1]*sols[j][1], MF[2]*sols[j][2]
@@ -388,36 +388,11 @@ def is_isotropic4(a1,a2,a3,a4):
         
         
 def tenary_quadratic_solve(a1, a2, a3):
-    print("a1,a2,a3 = ", a1,a2,a3)
+    #print("a1,a2,a3 = ", a1,a2,a3)
     if a1*a2*a3 == 0: return False
     a_d = a1.denominator()*a2.denominator()*a3.denominator()
     result = is_isotropic3_2(a_d*a1,a_d*a2,a_d*a3)
     if result != False:
         return (result[0]/result[2], result[1]/result[2])
     else: return False
-    print("a1,a2,a3 = ", a1,a2,a3)
-    if a1 not in ZZ:
-        if a1.denominator().is_square():
-            c1 = a1*a1.denominator()
-        else: return False
-    else: c1 = a1
-    if a2 not in ZZ:
-        if a2.denominator().is_square():
-            c2 = a2*a2.denominator()
-        else: return False
-    else: c2 = a2
-    print("c1,c2,c3 = ", c1,c2,a3)
-    if a3 not in ZZ:
-        if a3.denominator().is_square():
-            c3 = a3*a3.denominator()
-        else: return False
-    else: c3 = a3
-    print("c1,c2,c3 = ", c1,c2,c3)
     
-    if result == False:
-        return False
-    else:
-        if a3 not in ZZ:
-            return (ZZ(sqrt(a3.denominator()))*result[0]/result[2], ZZ(sqrt(a3.denominator()))*result[1]/result[2])
-        else:
-            return (result[0]/result[2], result[1]/result[2])
