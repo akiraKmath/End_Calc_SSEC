@@ -1,6 +1,6 @@
 load("test_end_calc.sage")
 
-k = 40                                  #実験に用いる基礎体の標数
+k = 30                                  #実験に用いる基礎体の標数
 ells_num = 8                            #同種写像の次数の素因数の個数
 collect_nums = 3                        #2,3-isogenyの数
 Fp_defined = 1                          #1なら素体上, 2なら拡大体, 0ならランダム

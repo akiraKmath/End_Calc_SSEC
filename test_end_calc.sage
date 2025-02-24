@@ -50,7 +50,7 @@ def End_basis_test(k, ells_num, collect_nums, Fp_defined, is_elkies, D = 0):
         j = F(E.j_invariant())
         cla += 1
         #print("cla : ", cla)
-        if cla >= 5＃
+        if cla >= 5:
             print("Can't find elliptic curve")
             print("=========================================================")
             print()
