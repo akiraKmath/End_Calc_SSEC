@@ -3,7 +3,7 @@ load("test_end_calc.sage")
 k = 40                                  #実験に用いる基礎体の標数
 ells_num = 8                            #同種写像の次数の素因数の個数
 collect_nums = 3                        #2,3-isogenyの数
-Fp_defined = 0                          #1なら素体上, 2なら拡大体, 0ならランダム
+Fp_defined = 1                          #1なら素体上, 2なら拡大体, 0ならランダム
 D = 0                                   #KLPTでのパラメータ, Defaultは0(関数内で自動で決定)
 is_elkies = True                        #Elkies素数を用いるか？
 test_time = 5                           #実行回数
@@ -21,10 +21,10 @@ timeset_KLPT = []
 timeset_Deuring = []
 timeset_total = []
 allset_num_gen = []
-
+count = 0
 #=========================================================
 
-for i in range(test_time):
+while count < test_time:
     result = End_basis_test(k, ells_num, collect_nums, Fp_defined, is_elkies, D = 0)
     if result != False:
         basis, time_stamp, num_gen = result
@@ -41,6 +41,7 @@ for i in range(test_time):
         all_num_gen += num_gen; allset_num_gen.append(num_gen)
         print("=========================================================")
         print()
+        count+=1
 print()
 print("=== Experimental result =================================")
 print("min Computing End: ", min(timeset_calc_end))

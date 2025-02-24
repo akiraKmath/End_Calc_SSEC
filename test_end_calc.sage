@@ -35,13 +35,28 @@ def End_basis_test(k, ells_num, collect_nums, Fp_defined, is_elkies, D = 0):
         #D = RR((8.0*log(p))/(log(log(p))))
     #======== Fp上の超特異楕円曲線の決定 =======================
     print("=== Fix a supersingular elliptic curve ==================")
+    cla = 0
     while(1) :
-        phis = random_isogeny_power_of_2(exp=exp1,field=F,start=E_1728)
+        if Fp_defined == 1:
+            preF = GF(p)
+            phis = random_isogeny_power_of_2(exp=exp1,field=preF,start=E_1728)
+        else:
+            phis = random_isogeny_power_of_2(exp=exp1,field=F,start=E_1728)
+
+
         ###Eの定義の表示###
 
         E = phis[randint(1,exp1)].codomain()  
-        j = E.j_invariant()
-        
+        j = F(E.j_invariant())
+        cla += 1
+        #print("cla : ", cla)
+        if cla >= 5＃
+            print("Can't find elliptic curve")
+            print("=========================================================")
+            print()
+            return False
+
+
         if j != j^p:
             if Fp_defined == 0 or Fp_defined == 2:
                 Fp = 2
@@ -54,6 +69,7 @@ def End_basis_test(k, ells_num, collect_nums, Fp_defined, is_elkies, D = 0):
                 Fp = 1
                 break
             else: continue
+        
     print("j-invariant of E = ", j)
     E_start = EllipticCurve_from_j(j)
     E = E_start

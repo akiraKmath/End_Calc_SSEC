@@ -10,7 +10,7 @@ def random_isogeny_power_of_2(exp,field,start):
     # It returns a list [P,Q,Ext], where [P,Q] is a basis of E[ell]
     # and Ext is the curve that P,Q in Ext.
     def Basis_of_Torsions(E,ell,z):
-        FF = E.base_field(); p = ZZ(sqrt(FF.order()))
+        FF = E.base_field(); p = FF.order().factor()[0][0]
         a = E.a4(); b = E.a6(); d = 1;
 
         while(1):
@@ -46,7 +46,7 @@ def random_isogeny_power_of_2(exp,field,start):
 
     ## Compute random 2-isogenies
     FF = start.base_field()
-    char = ZZ(sqrt(FF.order()))
+    char = FF.characteristic()
     z = FF.gen()
     for idx in range(exp):
         ## Pick a basis of the 2-torsion group of Temp_E
