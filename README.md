@@ -1,4 +1,4 @@
-(仮)日本語版  
+<!-- (仮)日本語版  
 # 超特異楕円曲線の自己準同型環計算アルゴリズム
 有限体 $\mathbb{F}_q$上の超特異楕円曲線 $E$の自己準同型環 $\mathrm{End}(E)$の基底計算のコードを紹介する.  
 本コードは~~で提案されたものの実装したものである.
@@ -22,4 +22,27 @@
 - `Fp_defined`: 基礎体(`Fp=1`なら素体, `Fp=2`なら拡大体, `Fp=0`なら制限なし)
 - `D`: 
 - `is_elkies`: Elkies素数の利用の有無
-- `test_times`: 実行回数
+- `test_times`: 実行回数 -->
+
+# Algorithm for computing the endomorphism ring of a supersingular elliptic curve over a finite field
+A SageMath implementation of the algorithm following the paper An implementation report of computing the endomorphism ring of a supersingular elliptic curve, by Yuta Kambe, Akira Katayama, Kazuki Komine, Yusuke Aikawa, Yuki Ishihara, Masaya Yasuda, and Kazuhiro Yokoyama.
+## Theoretical Background
+
+## The details of the implementation
+The alogrithm can be divided into the following steps:
+1. Computing the endomorphism ring:
+    1. Finding an isogeny cycle on $E$
+    1. Conversion to an element of $\mathbb{Q}$-quanternion algebra
+    1. Verification of basis
+2. Computing KLPT algorithm
+3. Computing Deuring correspondence
+
+## Example Usage
+You can use `sage test_end_calc.sage`
+The following parametors are editable:
+- `k`: The bit number of $p$ the characteristic of $\mathbb{F}_q$
+- `ells_num`: The number of prime numbers for finding isogeny cycles 
+- `collect_nums`: number of 2,3-isogenies
+- `Fp_defined`: The base field of $E$(if `Fp=1`, prime field, if `Fp=2`, the extension field, if `Fp=0`, either of the prime field or the extension field)
+- `is_elkies`: Either using Elkies' method or not
+- `test_times`: 
