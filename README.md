@@ -45,4 +45,9 @@ The following parametors are editable:
 - `collect_nums`: number of 2,3-isogenies
 - `Fp_defined`: The base field of $E$(if `Fp=1`, prime field, if `Fp=2`, the extension field, if `Fp=0`, either of the prime field or the extension field)
 - `is_elkies`: Either using Elkies' method or not
-- `test_times`: 
+- `test_times`:
+
+## License
+An implementation program of computing the endomorphism ring of a given supersingular elliptic curve besed on finding isogeny cycle.
+(C) 2025 Mitsubisi Electric, Rikkyo University, Created by Yuta Kambe, Akira Katayama, Kazuki Komine, Yusuke Aikawa, Yuki Ishihara, Masaya Yasuda, Kazuhiro Yokoyama.
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.

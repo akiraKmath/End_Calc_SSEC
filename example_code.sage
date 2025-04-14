@@ -1,3 +1,9 @@
+"""
+An implementation program of computing the endomorphism ring of a given supersingular elliptic curve besed on finding isogeny cycle.
+(C) 2025 Mitsubisi Electric, Rikkyo University, Created by Yuta Kambe, Akira Katayama, Kazuki Komine, Yusuke Aikawa, Yuki Ishihara, Masaya Yasuda, Kazuhiro Yokoyama.
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+"""
+
 load("test_end_calc.sage")
 
 k = 30                                  #実験に用いる基礎体の標数
