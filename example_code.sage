@@ -9,7 +9,7 @@ load("test_end_calc.sage")
 k = 30                                  #実験に用いる基礎体の標数
 ells_num = 8                            #同種写像の次数の素因数の個数
 collect_nums = 3                        #2,3-isogenyの数
-Fp_defined = 1                          #1なら素体上, 2なら拡大体, 0ならランダム
+Fp_defined = 2                          #1なら素体上, 2なら拡大体, 0ならランダム
 D = 0                                   #KLPTでのパラメータ, Defaultは0(関数内で自動で決定)
 is_elkies = True                        #Elkies素数を用いるか？
 test_time = 5                           #実行回数

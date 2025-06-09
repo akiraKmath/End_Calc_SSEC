@@ -22,7 +22,7 @@ load("trace_cal.sage")
 
 
 def End_basis_test(k, ells_num, collect_nums, Fp_defined, is_elkies, D = 0):
-    bound = 9*k                            #Schoof Algorithm 用の制限(基準)
+    bound = 6*k                            #Schoof Algorithm 用の制限(基準)
     time_stamp = []
     print("=== Fix a prime of bit k ================================")
     p = random_blum_prime(2^(k-1),2^k)

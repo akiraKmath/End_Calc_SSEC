@@ -38,12 +38,12 @@ The alogrithm can be divided into the following steps:
 3. Computing Deuring correspondence
 
 ## Example Usage
-You can use `sage test_end_calc.sage`
-The following parametors are editable:
+You can use `sage example_code.sage`
+The following parametors in `example_code.sage` are editable:
 - `k`: The bit number of $p$ the characteristic of $\mathbb{F}_q$
 - `ells_num`: The number of prime numbers for finding isogeny cycles 
 - `collect_nums`: number of 2,3-isogenies
-- `Fp_defined`: The base field of $E$(if `Fp=1`, prime field, if `Fp=2`, the extension field, if `Fp=0`, either of the prime field or the extension field)
+- `Fp_defined`: The base field of $E$(if `Fp=1`, prime field, if `Fp=2`, the extension field (the default), if `Fp=0`, either of the prime field or the extension field)
 - `is_elkies`: Either using Elkies' method or not
 - `test_times`:
 
