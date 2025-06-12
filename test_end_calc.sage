@@ -1,5 +1,5 @@
 """
-An implementation program of computing the endomorphism ring of a given supersingular elliptic curve besed on finding isogeny cycle.
+An implementation program of computing the endomorphism ring of a given supersingular elliptic curve besed on finding isogeny cycles.
 (C) 2025 Mitsubisi Electric, Rikkyo University, Created by Yuta Kambe, Akira Katayama, Kazuki Komine, Yusuke Aikawa, Yuki Ishihara, Masaya Yasuda, Kazuhiro Yokoyama.
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 """
@@ -22,7 +22,7 @@ load("trace_cal.sage")
 
 
 def End_basis_test(k, ells_num, collect_nums, Fp_defined, is_elkies, D = 0):
-    bound = 6*k                            #Schoof Algorithm 用の制限(基準)
+    bound = 8*k                            #This parameter is twice the maximum degree of cycle during cycle search.
     time_stamp = []
     print("=== Fix a prime of bit k ================================")
     p = random_blum_prime(2^(k-1),2^k)
