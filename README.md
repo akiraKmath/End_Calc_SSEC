@@ -45,7 +45,7 @@ The following parameters in `example_code.sage` are editable:
 - `collect_nums`: The number of collected 2,3-isogenies
 - `Fp_defined`: The base field of $E$(if `Fp=1`, prime field, if `Fp=2`, the extension field (the default), if `Fp=0`, either of the prime field or the extension field)
 - `is_elkies`: Either using Elkies' method or not
-- `test_times`:
+- `test_times`: The number of executions
 
 ## License
 An implementation program of computing the endomorphism ring of a given supersingular elliptic curve besed on finding isogeny cycles.
