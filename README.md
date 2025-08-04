@@ -38,6 +38,8 @@ The alogrithm can be divided into the following steps:
 3. Computing the Deuring correspondence
 
 ## Example Usage
+This implementation requires the database of modular polynomials.
+Download the database from [https://aur.archlinux.org/packages/sage-data-kohel](https://aur.archlinux.org/packages/sage-data-kohel) before running the code.
 You can run `sage example_code.sage`
 The following parameters in `example_code.sage` are editable:
 - `k`: The bit number of $p$ the characteristic of $\mathbb{F}_q$
